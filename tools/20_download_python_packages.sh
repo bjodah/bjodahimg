@@ -10,4 +10,12 @@ tmpdir=$(mktemp -d)
 trap "rm -r $tmpdir" SIGINT SIGTERM EXIT
 virtualenv $tmpdir
 source $tmpdir/bin/activate
-pip install --no-use-wheel --download environment/resources/pypi_download -r environment/resources/python_packages.txt
+pip install --no-use-wheel --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
+
+echo '#!/bin/bash -e'>tests/test_python_packages.sh
+for pypkg in $(cat resources/python_packages.txt); do
+    if [[ $pypkg == *-* ]]; then
+        continue
+    fi
+    echo "python -c \"import $pypkg\"">>tests/test_python_packages.sh
+done

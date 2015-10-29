@@ -2,11 +2,33 @@
 # DEB package builder for sundials
 # Copyright (c) 2015 Björn Dahlgren
 # Public domain, use it as you see fit.
+
+SUNDIALS_FNAME="sundials-2.6.2.tar.gz"
+
+# We assume this script is idempotent and side effects are
+# left intact since last invocation:
+# BEGIN CAHCE LOGIC
+ABS_SCRIPT_DIR=$(unset CDPATH && cd "$(dirname "$0")" && echo $PWD)
+SCRIPT_BASE=$(basename $0)
+CACHE_BASE=$SCRIPT_BASE.cache
+SOURCES="$SCRIPT_BASE $SUNDIALS_FNAME"
+savehash() {
+    cd $ABS_SCRIPT_DIR && md5sum $SOURCES > $CACHE_BASE
+}
+validhash() {
+    cd $ABS_SCRIPT_DIR && md5sum -c $CACHE_BASE >/dev/null 2>&1 && return 0
+    return 1
+}
+if validhash; then
+    echo "Valid hash (in $ABS_SCRIPT_DIR/$SCRIPT_BASE, exiting early)"
+    exit 0
+fi
+# END CACHE LOGIC
+
 export NAME=libsundials-serial
 export VERSION=2.6.2
 export DEBVERSION=${VERSION}-1
 TIMEOUT=60  # 60 seconds
-SUNDIALS_FNAME="sundials-2.6.2.tar.gz"
 DEB_ORIG_FNAME="libsundials-serial_2.6.2.orig.tar.gz"
 SUNDIALS_MD5="3deeb0ede9f514184c6bd83ecab77d95"
 SUNDIALS_URLS=(\
@@ -58,6 +80,7 @@ EOF
         echo "3.0 (quilt)" > debian/source/format
         # Build it
         debuild -us -uc
+        savehash
         exit 0
     fi
 done

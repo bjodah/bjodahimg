@@ -9,7 +9,7 @@ cd "$absolute_repo_path"
 
 mkdir -p build/
 cp deb-buildscripts/*.sh build/
-docker run --name bjodah-bjodahimgbase-build -e TERM -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -v $absolute_repo_path/build:/build -w /build $REGISTRY_USER/$DOCKERFILE_NAME:$TAG /build/build-all-deb.sh | tee 90_build_packages.sh.log
+docker run --name bjodah-bjodahimgbase-build -e TERM -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -v $absolute_repo_path/build:/build -w /build $REGISTRY_USER/$DOCKERFILE_NAME:$TAG /build/build-all-deb.sh | tee $(basename $0).log
 BUILD_EXIT=$(docker wait bjodah-bjodahimgbase-build)
 docker rm bjodah-bjodahimgbase-build
 if [[ "$BUILD_EXIT" != "0" ]]; then
@@ -17,4 +17,10 @@ if [[ "$BUILD_EXIT" != "0" ]]; then
     exit 1
 else
     echo "Build succeeded"
+    PKGS=build/deb-*-build/*.deb
+    echo -n "">./resources/dpkg_packages.txt
+    for PKG in $PKGS; do
+        echo -n "$(basename $PKG) " >>./resources/dpkg_packages.txt
+    done
+    cp $PKGS packages/
 fi

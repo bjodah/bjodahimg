@@ -1,4 +1,5 @@
 setuptools
+scipy
 future
 cython
 sympy
@@ -16,4 +17,3 @@ numpydoc
 jupyter
 argh
 quantities
-scipy

@@ -6,8 +6,9 @@
     libgmp-dev libmpfr-dev \
     libopenmpi-dev \
     libgsl0-dev \
+    libatlas-base-dev \
     python-pip python3-pip \
     python-numpy python3-numpy \
     python-matplotlib python3-matplotlib \
     python-mako python3-mako \
-    python-mpmath python3-mpmath && \
+    python-mpmath python3-mpmath

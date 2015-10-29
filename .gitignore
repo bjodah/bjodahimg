@@ -1,4 +1,5 @@
 *.log
+deb-buildscripts/*.sh.cache
 deb-buildscripts/*.tar.gz
 deb-buildscripts/*.tar.bz2
 deb-buildscripts/*-build/
