@@ -34,8 +34,8 @@ read -r -d '' PYPKGS <<EOF
         wget --quiet $PYPI_MIRROR/\$FNAME -O /tmp/\$FNAME; \\
     done && \\
     for PYPKG in $(cat ./resources/python_packages.txt | grep -v "setuptools" | tr '\n' ' '); do \\
-        easy_install-2.7 --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
-        easy_install-3.4 --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+        easy_install-2.7 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+        easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
     done
 EOF
 read -r -d '' CLEAN <<EOF
@@ -61,4 +61,8 @@ RUN \\
     ${DPKG_DOWNLOAD} && \\
     ${CLEAN} && \\
     ${MATPLOTLIB}
+RUN \\
+    easy_install /usr/local/lib/python2.7/dist-packages/pytest_pep8-1.0.6-py2.7.egg
 EOF
+
+# the last RUN statement contain various fixes...
