@@ -1,5 +1,5 @@
-#!/bin/bash
-TAG=${1:-latest}
+#!/bin/bash -u
+TAG=${1}
 for DPKG in $(cat ./resources/dpkg_packages.txt); do
     rsync -aur ./packages/$DPKG repo@hera.physchem.kth.se:~/public_html/bjodahimg/$TAG/dpkg
 done

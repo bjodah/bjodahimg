@@ -1,5 +1,5 @@
-#!/bin/bash -x
-TAG=${1:-latest}
+#!/bin/bash -xu
+TAG=${1}
 REGISTRY_USER=bjodah
 DOCKERFILE_NAME=bjodahimgbase
 

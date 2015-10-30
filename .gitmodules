@@ -1,3 +1,6 @@
 [submodule "bjodahimg-dockerfile"]
 	path = bjodahimg-dockerfile
 	url = git@github.com:bjodah/bjodahimg-dockerfile
+[submodule "bjodahimgbase"]
+	path = bjodahimgbase
+	url = git@github.com:bjodah/bjodahimgbase.git

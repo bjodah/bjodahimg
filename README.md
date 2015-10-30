@@ -13,11 +13,11 @@ See also [bjodahimgbase](https://github.com/bjodah/bjodahimgbase)
 In principle the following steps are executed:
 
 ```
-$ ./20_download_python_packages.sh
-$ ./40_build_packages.sh
-$ ./60_upload_to_repo.sh
-$ ./70_generate_Dockerfile.sh
-$ ./80_build_image.sh
+$ ./tools/20_download_python_packages.sh
+$ ./tools/40_build_packages.sh latest
+$ ./tools/60_upload_to_repo.sh latest
+$ ./tools/70_generate_Dockerfile.sh latest
+$ ./tools/80_build_image.sh
 ```
 
 See [deb-buildscripts/](deb-buildscripts/) for packages built by
@@ -27,4 +27,15 @@ If tests pass in the last step the new ``Dockerfile`` is commited in
 git and pushed to
 [bjodahimg-dockerfile](https://github.com/bjodah/bjodahimg-dockerfile) 
 which triggers a trusted build on
-[docker hub](https://hub.docker.com/r/bjodah/bjodahimg).
+[docker hub](https://hub.docker.com/r/bjodah/bjodahimg):
+
+```
+$ cd bjodahimg-dockerfile
+$ git commit -am "various updates"
+$ git tag -a vX.Y -m vX.Y
+$ git push
+$ git push --tags
+$ cd ../
+$ git commit -am "new release X.Y"
+$ git push
+```

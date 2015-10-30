@@ -1,8 +1,8 @@
-#!/bin/bash -x
+#!/bin/bash -xu
 # Remember to first run:
 #    $ ./tools/download_python_packages.sh
 
-TAG=${1:-latest}
+TAG=${1}
 
 # Extract absolute path of dir above script, from:
 # http://unix.stackexchange.com/a/9546
@@ -51,7 +51,7 @@ EOF
 
 cat <<EOF >bjodahimg-dockerfile/environment/Dockerfile
 # DO NOT EDIT, This Dockerfile is generated from ./tools/10_generate_Dockerfile.sh
-FROM bjodah/bjodahimgbase:latest
+FROM bjodah/bjodahimgbase:v1.0
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
 RUN \\
     apt-get update && apt-get --quiet --assume-yes install ${APT_PACKAGES} && \\
