@@ -1,6 +1,6 @@
-#!/bin/bash -x
-TAG=${1:-latest}
-REGISTRY_USER=${2:-localhost}  # avoid clash with trusted build
+#!/bin/bash -xu
+TAG=${1}
+REGISTRY_USER=${2}  # avoid clash with trusted build
 DOCKERFILE_NAME=bjodahimg
 
 absolute_repo_path_x="$(readlink -fn -- "$(dirname $0)/.."; echo x)"

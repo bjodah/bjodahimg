@@ -17,7 +17,7 @@ $ ./tools/20_download_python_packages.sh
 $ ./tools/40_build_packages.sh latest
 $ ./tools/60_upload_to_repo.sh latest
 $ ./tools/70_generate_Dockerfile.sh latest
-$ ./tools/80_build_image.sh
+$ ./tools/80_build_image.sh latest dummy_reg_user
 ```
 
 See [deb-buildscripts/](deb-buildscripts/) for packages built by

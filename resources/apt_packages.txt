@@ -5,7 +5,6 @@
     libfreetype6-dev libpng12-dev \
     libgmp-dev libmpfr-dev \
     libopenmpi-dev \
-    libgsl0-dev \
     libatlas-base-dev \
     python-pip python3-pip \
     python-numpy python3-numpy \
