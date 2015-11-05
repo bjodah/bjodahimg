@@ -2,8 +2,9 @@
     texlive-lang-swedish texlive-science texlive-latex-recommended \
     dvipng texlive-fonts-recommended texlive-generic-recommended \
     texlive-latex-extra graphviz dot2tex biber \
-    libfreetype6-dev libpng12-dev \
+    libfreetype6-dev libpng12-dev libjpeg-dev \
     libgmp-dev libmpfr-dev \
+    phantomjs imagemagick \
     libopenmpi-dev \
     libatlas-base-dev \
     python-pip python3-pip \

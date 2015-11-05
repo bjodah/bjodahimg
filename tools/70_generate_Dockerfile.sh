@@ -62,7 +62,10 @@ RUN \\
     ${CLEAN} && \\
     ${MATPLOTLIB}
 RUN \\
-    easy_install /usr/local/lib/python2.7/dist-packages/pytest_pep8-1.0.6-py2.7.egg
+    #apt-get update && apt-get --quiet --assume-yes install libzmq3-dev && \\
+    #${CLEAN} && \\
+    easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
+    easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg
 EOF
 
 # the last RUN statement contain various fixes...

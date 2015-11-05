@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 which pelican
 which coveralls
+which phantomjs
 
 # Test py.test:
 tmpdir=$(mktemp -d)
