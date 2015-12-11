@@ -5,7 +5,7 @@
 # Examples
 # --------
 #
-#   $ bjodah.sh input/ output/ "make" latest "--net='none'"
+#   $ bjodah.sh input/ output/ "make" latest
 # 
 # Notes
 # -----

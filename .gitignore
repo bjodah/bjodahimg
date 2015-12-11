@@ -6,3 +6,6 @@ deb-buildscripts/*-build/
 build/
 packages/
 pypi_download/
+*.egg-info
+dist/
+**.pyc
