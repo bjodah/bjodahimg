@@ -21,7 +21,7 @@ ABS_OUTPUT_PATH=$(unset CDPATH && cd "$2" && echo $PWD)
 # Since docker run as uid 0 by default we export our uid and gid and set ownership
 # of files in our volume /output before exiting the container.
 
-cat <<'EOF' | docker run --rm -e RUNCMD="${3:-make}" -e TERM -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -v $ABS_INPUT_PATH:/input:ro -v $ABS_OUTPUT_PATH:/output -w /output -i bjodah/bjodahimg:${4:-latest} bash -x
+cat <<'EOF' | docker run --rm -e RUNCMD="${3:-make}" -e TERM -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -v $ABS_INPUT_PATH:/input:ro -v $ABS_OUTPUT_PATH:/output -w /output -i ${5:-bjodah/bjodahimg}:${4:-latest} bash -x
 cp -rau /input/. .
 addgroup --gid "$HOST_GID" mygroup
 adduser --disabled-password --uid "$HOST_UID" --gid "$HOST_GID" --gecos '' myuser

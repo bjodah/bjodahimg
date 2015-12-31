@@ -4,7 +4,7 @@
 # Public domain, use it as you see fit.
 
 STUBNAME="gsl"
-SRC_FNAME="gsl-2.0.tar.gz"
+SRC_FNAME="gsl-2.1.tar.gz"
 
 # We assume this script is idempotent and side effects are
 # left intact since last invocation:
@@ -26,11 +26,11 @@ if validhash; then
 fi
 # END CACHE LOGIC
 
-export VERSION=2.0
+export VERSION=2.1
 export DEBVERSION=${VERSION}-1
 TIMEOUT=60  # 60 seconds
 DEB_ORIG_FNAME="lib${STUBNAME}_${VERSION}.orig.tar.gz"
-SRC_MD5="ae44cdfed78ece40e73411b63a78c375"
+SRC_MD5="d8f70abafd3e9f0bae03c52d1f4e8de5"
 SRC_URLS=(\
 "http://hera.physchem.kth.se/~repo/${SRC_MD5}/${SRC_FNAME}" \
 "http://pkgs.fedoraproject.org/repo/pkgs/gsl/${SRC_FNAME}/${SRC_MD5}/${SRC_FNAME}" \

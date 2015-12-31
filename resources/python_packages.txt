@@ -11,9 +11,13 @@ sphinx
 periodictable
 pycompilation
 pycodeexport
-pelican
 coveralls
 numpydoc
 jupyter
 argh
 quantities
+fastcache
+nikola
+bottle
+sqlalchemy
+bokeh

@@ -21,8 +21,18 @@ docker rm bjodah-bjodahimg-tests
 if [[ "$TEST_EXIT" != "0" ]]; then
     echo "Tests failed"
     exit 1
+fi
+
+cd $absolute_repo_path/tests
+PYTHONPATH=$absolute_repo_path/bjodah python -m bjodah build --tag $TAG --inp input --out output --cmd "pdflatex main.tex"
+if [ ! -f output/main.pdf ]; then
+    echo "bjodah python module build command broken"
+    exit 1
 else
-    cat <<EOF
+    cd -
+fi
+
+cat <<EOF
 Tests passed
 
 
@@ -32,4 +42,3 @@ You should now commit the changes to trigger a trusted build:
     $ git commit -am 'Updated version'
     $ git push
 EOF
-fi
