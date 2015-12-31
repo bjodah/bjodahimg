@@ -66,7 +66,8 @@ RUN \\
 RUN \\
     easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
     easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
-    ipython2 kernel install
+    ipython2 kernel install && \\
+    ipython3 kernel install
 EOF
 
 # the last RUN statement contain various fixes...
