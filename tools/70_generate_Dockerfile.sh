@@ -68,6 +68,8 @@ RUN \\
     easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
     ipython2 kernel install && \\
     ipython3 kernel install
+RUN \\
+    pip3 install Nikola[extras]
 EOF
 
 # the last RUN statement contain various fixes...
