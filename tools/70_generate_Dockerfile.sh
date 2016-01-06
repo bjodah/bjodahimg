@@ -69,7 +69,11 @@ RUN \\
     ipython2 kernel install && \\
     ipython3 kernel install
 RUN \\
-    pip3 install Nikola[extras]
+    pip3 install --upgrade --force-reinstall Nikola[extras] && \\
+    ln -s /usr/local/share/pyphen /usr/share/pyphen  # https://github.com/Kozea/Pyphen/issues/10
 EOF
 
 # the last RUN statement contain various fixes...
+
+    # apt-get update && apt-get --quiet --assume-yes -f install libfreetype6-dev libjpeg62 libjpeg62-dev; apt-get -f install && \\
+    # ${CLEAN} && \\
