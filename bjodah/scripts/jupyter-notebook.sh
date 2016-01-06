@@ -1,9 +1,9 @@
 #!/bin/bash
 MOUNT=${1:-.}
-IMAGE=${2:-bjodah/bjodahimg}
-PORT=${3:-8888}
-NOTEBOOKCMD=${4:-jupyter-notebook}
-TAG=${5:-latest}
+PORT=${2:-8888}
+NOTEBOOKCMD=${3:-jupyter-notebook}
+TAG=${4:-latest}
+IMAGE=${5:-bjodah/bjodahimg}
 DOCKERIMAGE_USED="$IMAGE:$TAG"
 if [[ "$MOUNT" == .* ]]; then
     MOUNT="$(pwd)/$MOUNT"
