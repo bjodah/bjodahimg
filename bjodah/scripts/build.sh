@@ -25,6 +25,7 @@ cat <<'EOF' | docker run --rm -e RUNCMD="${3:-make}" -e TERM -e HOST_UID=$(id -u
 cp -rau /input/. .
 addgroup --gid "$HOST_GID" mygroup
 adduser --disabled-password --uid "$HOST_UID" --gid "$HOST_GID" --gecos '' myuser
+chown "$HOST_UID":"$HOST_GID" /root
 su -m myuser -c "$RUNCMD"
 BUILD_EXIT=$?
 exit $BUILD_EXIT

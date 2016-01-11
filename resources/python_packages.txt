@@ -1,4 +1,5 @@
 setuptools
+stdeb
 scipy
 future
 cython
@@ -17,7 +18,6 @@ jupyter
 argh
 quantities
 fastcache
-nikola
 bottle
 sqlalchemy
 bokeh

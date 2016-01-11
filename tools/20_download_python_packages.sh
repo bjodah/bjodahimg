@@ -5,6 +5,7 @@ trap "rm -r $tmpdir" SIGINT SIGTERM EXIT
 virtualenv $tmpdir
 source $tmpdir/bin/activate
 pip install --no-use-wheel --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
+pip3.4 install --no-use-wheel --download pypi_download $(cat resources/python3_packages.txt | tr '\n' ' ')
 
 cat <<EOF>tests/test_python_packages.sh
 #!/bin/bash -e

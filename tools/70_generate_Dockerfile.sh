@@ -22,7 +22,7 @@ read -r -d '' DPKG_DOWNLOAD <<EOF
     done
 EOF
 echo "b"
-read -r -d '' PYPKGS <<EOF
+read -r -d '' PYPKGS_DOWNLOAD <<EOF
     cd /tmp && \\
     wget --quiet $PYPI_MIRROR/$(cd pypi_download; ls setuptools-*.tar.gz) && \\
     tar xvzf setuptools-*.tar.gz  && \\
@@ -32,12 +32,24 @@ read -r -d '' PYPKGS <<EOF
     hash -r  && \\
     for FNAME in $(cd pypi_download; ls * | grep -v "setuptools-" | tr '\n' ' '); do \\
         wget --quiet $PYPI_MIRROR/\$FNAME -O /tmp/\$FNAME; \\
-    done && \\
+    done
+EOF
+read -r -d '' PYPKGS_INSTALL <<EOF
     for PYPKG in $(cat ./resources/python_packages.txt | grep -v "setuptools" | tr '\n' ' '); do \\
         easy_install-2.7 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
         easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
-    done
+    done && \\
+    for PYPKG in $(cat ./resources/python3_packages.txt | grep -v "setuptools" | tr '\n' ' '); do \\
+        easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+    done && \\
+    easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
+    easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
+    ln -s /usr/local/share/pyphen /usr/share/pyphen && \\
+    ipython2 kernel install && \\
+    ipython3 kernel install
 EOF
+# https://github.com/Kozea/Pyphen/issues/10
+
 read -r -d '' CLEAN <<EOF
     apt-get clean && \\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -57,20 +69,11 @@ RUN \\
     apt-get update && apt-get --quiet --assume-yes install ${APT_PACKAGES} && \\
     ${CLEAN}
 RUN \\
-    apt-get update && apt-get --quiet --assume-yes install libzmq3-dev libxslt1-dev libxml2-dev && \\
-    ${CLEAN} && \\
-    ${PYPKGS} && \\
+    ${PYPKGS_DOWNLOAD} && \\
+    ${PYPKGS_INSTALL} && \\
     ${DPKG_DOWNLOAD} && \\
     ${CLEAN} && \\
     ${MATPLOTLIB}
-RUN \\
-    easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
-    easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
-    ipython2 kernel install && \\
-    ipython3 kernel install
-RUN \\
-    pip3 install --upgrade --force-reinstall Nikola[extras] && \\
-    ln -s /usr/local/share/pyphen /usr/share/pyphen  # https://github.com/Kozea/Pyphen/issues/10
 EOF
 
 # the last RUN statement contain various fixes...

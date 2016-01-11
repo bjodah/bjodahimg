@@ -1,6 +1,10 @@
 #!/bin/bash -e
-
-BOOST_FNAME=boost_1.59.0.tar.bz2
+# Modified version of:
+# https://github.com/ulikoehler/deb-buildscripts/blob/master/deb-boost.sh
+BOOST_FNAME=boost-all_1.60.0.orig.tar.bz2
+BOOST_URL=http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2
+BOOST_MD5=65a840e1a0b13a558ff19eeb2c4f0cbe
+export DEBVERSION=1.60.0-1
 
 # We assume this script is idempotent and side effects are
 # left intact since last invocation:
@@ -22,21 +26,20 @@ if validhash; then
 fi
 # END CACHE LOGIC
 
-export DEBVERSION=1.59.0-1
-echo "6aa9a5c6a4ca1016edd0ed1178e3cb87  $BOOST_FNAME" | md5sum -c -- \
-    || wget --quiet "http://downloads.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.bz2?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.59.0%2F&ts=1385240128&use_mirror=switch" -O $BOOST_FNAME
-echo "6aa9a5c6a4ca1016edd0ed1178e3cb87  $BOOST_FNAME" | md5sum -c -- || exit 1
+echo "$BOOST_MD5  $BOOST_FNAME" | md5sum -c -- \
+    || wget --quiet $BOOST_URL -O $BOOST_FNAME
+echo "$BOOST_MD5  $BOOST_FNAME" | md5sum -c -- || exit 1
 mkdir -p deb-boost-build
 cd deb-boost-build
-rm -rf boost_1_59_0/
-cp ../$BOOST_FNAME boost-all_1.59.0.orig.tar.bz2
-tar xjvf boost-all_1.59.0.orig.tar.bz2
-cd boost_1_59_0
+rm -rf boost_1_*/
+ln -s ../$BOOST_FNAME .
+tar xjvf $BOOST_FNAME
+cd boost_1_*
 #Build DEB
 rm -rf debian
 mkdir -p debian
 #Use the LICENSE file from nodejs as copying file
-touch debian/copying
+cp LICENSE_*.txt debian/copying
 #Create the changelog (no messages needed)
 dch --create -v $DEBVERSION --package boost-all ""
 #Create copyright file

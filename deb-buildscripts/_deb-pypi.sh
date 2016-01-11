@@ -1,0 +1,54 @@
+#!/bin/bash -e
+
+# There are too many cornercases with this method for it to be worthwhile.
+
+# We assume this script is idempotent and side effects are
+# left intact since last invocation:
+# BEGIN CAHCE LOGIC
+ABS_SCRIPT_DIR=$(unset CDPATH && cd "$(dirname "$0")" && echo $PWD)
+SCRIPT_BASE=$(basename $0)
+CACHE_BASE=$SCRIPT_BASE.cache
+SOURCES="$SCRIPT_BASE"
+savehash() {
+    cd $ABS_SCRIPT_DIR && md5sum $SOURCES > $CACHE_BASE
+}
+validhash() {
+    cd $ABS_SCRIPT_DIR && md5sum -c $CACHE_BASE >/dev/null 2>&1 && return 0
+    return 1
+}
+if validhash; then
+    echo "Valid hash ($ABS_SCRIPT_DIR/$SCRIPT_BASE unchanged, exiting early)"
+    exit 0
+fi
+# END CACHE LOGIC
+
+# Prerequisisties:
+apt-get update
+apt-get  --assume-yes install python-setuptools python-all python-all-dev python3-setuptools python3-all python3-all-dev
+# cp pypi_download/setuptools*.tar.gz /tmp
+# ( cd /tmp/; tar xf setuptools*; cd setuptools*; python setup.py install )
+easy_install-2.7  --allow-hosts=None --find-links file:///build/pypi_download/ stdeb
+easy_install-3.4  --allow-hosts=None --find-links file:///build/pypi_download/ stdeb
+
+# Build deb packages:
+mkdir -p deb-pypi-build
+cd deb-pypi-build
+
+for PKG in $(cd ../pypi_download/; ls *.*); do
+    if [[ $PKG =~ \.zip$ ]]; then
+        unzip ../pypi_download/${PKG}
+    else
+        tar xf ../pypi_download/${PKG}
+    fi
+    PKGBASE=$(python -c "print('-'.join(\"$PKG\".split('-')[:-1]))")
+    echo $PKGBASE
+    cd ${PKGBASE}-*
+    python setup.py --command-packages=stdeb.command bdist_deb
+    python3 setup.py --command-packages=stdeb.command bdist_deb
+    #dpkg -i deb_dist/*.deb
+    cp deb_dist/*.deb ../../
+    cd -
+done
+
+#py2dsc-deb ../pypi_download/numpy-1.10.4.tar.gz
+savehash

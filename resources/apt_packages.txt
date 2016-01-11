@@ -4,11 +4,11 @@
     texlive-latex-extra graphviz dot2tex biber \
     libfreetype6-dev libpng12-dev libjpeg-dev \
     libgmp-dev libmpfr-dev \
+    libzmq3-dev libxslt1-dev libxml2-dev \
     phantomjs imagemagick \
     libopenmpi-dev \
     libatlas-base-dev \
     python-pip python3-pip \
-    python-numpy python3-numpy \
     python-matplotlib python3-matplotlib \
     python-mako python3-mako \
     python-mpmath python3-mpmath
