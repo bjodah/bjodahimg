@@ -21,3 +21,10 @@ fastcache
 bottle
 sqlalchemy
 bokeh
+mogli
+pylatex
+joblib
+cclib
+toolz
+grip
+statsmodels

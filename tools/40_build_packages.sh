@@ -1,5 +1,5 @@
 #!/bin/bash -xu
-TAG=${1}
+TAG=v1.2
 REGISTRY_USER=bjodah
 DOCKERFILE_NAME=bjodahimgbase
 

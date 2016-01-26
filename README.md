@@ -14,7 +14,7 @@ In principle the following steps are executed:
 
 ```
 $ ./tools/20_download_python_packages.sh
-$ ./tools/40_build_packages.sh latest
+$ ./tools/40_build_packages.sh
 $ ./tools/60_upload_to_repo.sh latest
 $ ./tools/70_generate_Dockerfile.sh latest
 $ ./tools/80_build_image.sh latest dummy_reg_user
@@ -29,9 +29,14 @@ git and pushed to
 which triggers a trusted build on
 [docker hub](https://hub.docker.com/r/bjodah/bjodahimg):
 
+If tagging a new release:
 ```
+$ ssh repo@hera.physchem.kth.se 'rm public_html/bjodahimg/latest'
+$ ./tools/70_generate_Dockerfile.sh vX.Y
+$ ./tools/80_build_image.sh vX.Y dummy_reg_user
+$ ssh repo@hera.physchem.kth.se 'mkdir public_html/bjodahimg/vX.YY; ln -s vX.YY public_html/latest'
 $ cd bjodahimg-dockerfile
-$ git commit -am "various updates"
+$ git commit -am "various updates for release vX.Y"
 $ git tag -a vX.Y -m vX.Y
 $ git push
 $ git push --tags

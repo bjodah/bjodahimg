@@ -10,3 +10,11 @@ int main(){
     return 1;
 }
 EOF
+
+cat <<EOF | g++ -o /tmp/a.out -xc++ -std=c++11 - && /tmp/a.out
+#include <boost/vmd/is_seq.hpp>  // new in Boost 1.60
+
+int main(void){
+    return 0;
+}
+EOF

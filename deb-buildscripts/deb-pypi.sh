@@ -2,6 +2,8 @@
 
 # There are too many cornercases with this method for it to be worthwhile.
 
+# This scripts requires python-all-dev, python-stdeb
+
 # We assume this script is idempotent and side effects are
 # left intact since last invocation:
 # BEGIN CAHCE LOGIC
@@ -22,27 +24,22 @@ if validhash; then
 fi
 # END CACHE LOGIC
 
-# Prerequisisties:
-apt-get update
-apt-get  --assume-yes install python-setuptools python-all python-all-dev python3-setuptools python3-all python3-all-dev
-# cp pypi_download/setuptools*.tar.gz /tmp
-# ( cd /tmp/; tar xf setuptools*; cd setuptools*; python setup.py install )
-easy_install-2.7  --allow-hosts=None --find-links file:///build/pypi_download/ stdeb
-easy_install-3.4  --allow-hosts=None --find-links file:///build/pypi_download/ stdeb
 
 # Build deb packages:
 mkdir -p deb-pypi-build
 cd deb-pypi-build
 
-for PKG in $(cd ../pypi_download/; ls *.*); do
-    if [[ $PKG =~ \.zip$ ]]; then
-        unzip ../pypi_download/${PKG}
+PKG_FNAMES=$(cd ../pypi_download/; ls scipy*)
+for FNAME in $PKG_FNAMES; do
+    if [[ $FNAME =~ \.zip$ ]]; then
+        unzip ../pypi_download/${FNAME}
     else
-        tar xf ../pypi_download/${PKG}
+        tar xf ../pypi_download/${FNAME}
     fi
-    PKGBASE=$(python -c "print('-'.join(\"$PKG\".split('-')[:-1]))")
-    echo $PKGBASE
-    cd ${PKGBASE}-*
+    FNAMEBASE=$(python -c "print('-'.join(\"$FNAME\".split('-')[:-1]))")
+    echo $FNAMEBASE
+    cd ${FNAMEBASE}-*
+    set +x
     python setup.py --command-packages=stdeb.command bdist_deb
     python3 setup.py --command-packages=stdeb.command bdist_deb
     #dpkg -i deb_dist/*.deb

@@ -12,16 +12,18 @@ absolute_repo_path="${absolute_repo_path_x%x}"
 cd "$absolute_repo_path"
 
 APT_PACKAGES=$(cat ./resources/apt_packages.txt)
-DPKG_PKGS=$(cat ./resources/dpkg_packages.txt)
+DPKG_PKGS=$(cat ./resources/dpkg_packages.txt | head -c -1)
+echo "DPKG_PKGS=$DPKG_PKGS"
 DPKG_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/dpkg"
 PYPI_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/pypi"
-echo "a"
-read -r -d '' DPKG_DOWNLOAD <<EOF
-    for FNAME in {$DPKG_PKGS}; do \\
-        FILE=\$(mktemp); wget "$DPKG_MIRROR/\$FNAME" -qO \$FILE && sudo dpkg -i \$FILE; rm \$FILE; \\
-    done
+read -r -d '' DPKG_DOWNLOAD_INSTALL <<EOF
+    cd /tmp && \\
+    for FNAME in $DPKG_PKGS; do \\
+        wget --no-verbose "$DPKG_MIRROR/\$FNAME"; \\
+    done && \\
+    dpkg -i $DPKG_PKGS && \\
+    rm $DPKG_PKGS
 EOF
-echo "b"
 read -r -d '' PYPKGS_DOWNLOAD <<EOF
     cd /tmp && \\
     wget --quiet $PYPI_MIRROR/$(cd pypi_download; ls setuptools-*.tar.gz) && \\
@@ -63,17 +65,23 @@ EOF
 
 cat <<EOF >bjodahimg-dockerfile/environment/Dockerfile
 # DO NOT EDIT, This Dockerfile is generated from ./tools/10_generate_Dockerfile.sh
-FROM bjodah/bjodahimgbase:v1.0
+FROM bjodah/bjodahimgbase:v1.1
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
 RUN \\
     apt-get update && apt-get --quiet --assume-yes install ${APT_PACKAGES} && \\
     ${CLEAN}
 RUN \\
+    apt-get update && apt-get --quiet --assume-yes install freeglut3-dev && \\
+    ${CLEAN}
+RUN \\
+    ${DPKG_DOWNLOAD_INSTALL} && \\
     ${PYPKGS_DOWNLOAD} && \\
     ${PYPKGS_INSTALL} && \\
-    ${DPKG_DOWNLOAD} && \\
     ${CLEAN} && \\
     ${MATPLOTLIB}
+RUN \\
+    apt-get update && apt-get --quiet --assume-yes install libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev && \\
+    ${CLEAN}
 EOF
 
 # the last RUN statement contain various fixes...

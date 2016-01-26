@@ -32,7 +32,7 @@ echo "$BOOST_MD5  $BOOST_FNAME" | md5sum -c -- || exit 1
 mkdir -p deb-boost-build
 cd deb-boost-build
 rm -rf boost_1_*/
-ln -s ../$BOOST_FNAME .
+ln -fs ../$BOOST_FNAME .
 tar xjvf $BOOST_FNAME
 cd boost_1_*
 #Build DEB
