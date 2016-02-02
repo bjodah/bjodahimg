@@ -14,6 +14,7 @@ In principle the following steps are executed:
 
 ```
 $ ./tools/20_download_python_packages.sh
+$ ./tools/30_download_blobs.sh
 $ ./tools/40_build_packages.sh
 $ ./tools/60_upload_to_repo.sh latest
 $ ./tools/70_generate_Dockerfile.sh latest

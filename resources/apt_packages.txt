@@ -8,7 +8,6 @@
     phantomjs imagemagick \
     libopenmpi-dev \
     libatlas-base-dev \
-    python-pip python3-pip \
     python-matplotlib python3-matplotlib \
     python-mako python3-mako \
     python-mpmath python3-mpmath

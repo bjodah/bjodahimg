@@ -28,3 +28,4 @@ cclib
 toolz
 grip
 statsmodels
+mpld3

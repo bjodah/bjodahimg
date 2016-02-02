@@ -1,6 +1,5 @@
 #!/bin/bash -xu
-# Remember to first run:
-#    $ ./tools/download_python_packages.sh
+# This is getting out of hand, turn this into a Mako template when time permits.
 
 TAG=${1}
 
@@ -13,9 +12,14 @@ cd "$absolute_repo_path"
 
 APT_PACKAGES=$(cat ./resources/apt_packages.txt)
 DPKG_PKGS=$(cat ./resources/dpkg_packages.txt | head -c -1)
+BLOB_FNAMES=$(cat ./resources/blob_urls.txt | awk '{print $3}')
+for FNAME in $BLOB_FNAMES; do
+    echo $FNAME
+done
 echo "DPKG_PKGS=$DPKG_PKGS"
 DPKG_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/dpkg"
 PYPI_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/pypi"
+BLOBS_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/blobs"
 read -r -d '' DPKG_DOWNLOAD_INSTALL <<EOF
     cd /tmp && \\
     for FNAME in $DPKG_PKGS; do \\
@@ -23,6 +27,14 @@ read -r -d '' DPKG_DOWNLOAD_INSTALL <<EOF
     done && \\
     dpkg -i $DPKG_PKGS && \\
     rm $DPKG_PKGS
+EOF
+read -r -d '' BLOBS_DOWNLOAD_INSTALL <<EOF
+    cd /tmp && \\
+    for FNAME in $BLOB_FNAMES; do \\
+        wget --no-verbose "$BLOBS_MIRROR/\$FNAME"; \\
+    done && \\
+    bash miniconda2.sh -b -p /opt/miniconda2 && \\
+    rm $BLOB_FNAMES
 EOF
 read -r -d '' PYPKGS_DOWNLOAD <<EOF
     cd /tmp && \\
@@ -80,11 +92,13 @@ RUN \\
     ${CLEAN} && \\
     ${MATPLOTLIB}
 RUN \\
-    apt-get update && apt-get --quiet --assume-yes install libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev && \\
-    ${CLEAN}
+    ${BLOBS_DOWNLOAD_INSTALL}    
 EOF
 
 # the last RUN statement contain various fixes...
 
     # apt-get update && apt-get --quiet --assume-yes -f install libfreetype6-dev libjpeg62 libjpeg62-dev; apt-get -f install && \\
     # ${CLEAN} && \\
+
+#    apt-get update && apt-get --quiet --assume-yes install libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev && \\
+#    ${CLEAN}
