@@ -24,9 +24,10 @@ if [[ "$TEST_EXIT" != "0" ]]; then
 fi
 
 cd $absolute_repo_path/tests
-PYTHONPATH=$absolute_repo_path/bjodah python -m bjodah build --tag $TAG --inp input --out output --cmd "pdflatex main.tex"
+rm -f output/main.pdf
+PYTHONPATH=$absolute_repo_path/bjodah python -m dockre build --image $REGISTRY_USER/$DOCKERFILE_NAME:$TAG --inp input --out output --cmd "pdflatex main.tex"
 if [ ! -f output/main.pdf ]; then
-    echo "bjodah python module build command broken"
+    echo "dockre python module build command broken"
     exit 1
 else
     cd -

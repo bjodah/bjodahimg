@@ -10,3 +10,6 @@ pypi_download/
 dist/
 **.pyc
 tests/output/*.*
+blobs_download/
+!blobs_download/.emptyfile
+pypi_download_base/

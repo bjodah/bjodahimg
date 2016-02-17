@@ -3,12 +3,8 @@
 
 TAG=${1}
 
-# Extract absolute path of dir above script, from:
-# http://unix.stackexchange.com/a/9546
-absolute_repo_path_x="$(readlink -fn -- "$(dirname $0)/.."; echo x)"
-absolute_repo_path="${absolute_repo_path_x%x}"
-
-cd "$absolute_repo_path"
+ABS_REPO_PATH=$(unset CDPATH && cd "$(dirname "$0")/.." && echo $PWD)
+cd "$ABS_REPO_PATH"
 
 APT_PACKAGES=$(cat ./resources/apt_packages.txt)
 DPKG_PKGS=$(cat ./resources/dpkg_packages.txt | head -c -1)
@@ -20,12 +16,13 @@ echo "DPKG_PKGS=$DPKG_PKGS"
 DPKG_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/dpkg"
 PYPI_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/pypi"
 BLOBS_MIRROR="http://hera.physchem.kth.se/~repo/bjodahimg/$TAG/blobs"
+# The --force-overwrite below is for both python-cython and python3-cython: /usr/bin/cython
 read -r -d '' DPKG_DOWNLOAD_INSTALL <<EOF
     cd /tmp && \\
     for FNAME in $DPKG_PKGS; do \\
         wget --no-verbose "$DPKG_MIRROR/\$FNAME"; \\
     done && \\
-    dpkg -i $DPKG_PKGS && \\
+    dpkg -i --force-overwrite $DPKG_PKGS && \\
     rm $DPKG_PKGS
 EOF
 read -r -d '' BLOBS_DOWNLOAD_INSTALL <<EOF
@@ -44,16 +41,16 @@ read -r -d '' PYPKGS_DOWNLOAD <<EOF
     python2 setup.py install && \\
     python3 setup.py install && \\
     hash -r  && \\
-    for FNAME in $(cd pypi_download; ls * | grep -v "setuptools-" | tr '\n' ' '); do \\
+    for FNAME in $(cd pypi_download; ls * | grep -v "setuptools-" | grep -v "scipy-" | grep -v -i "cython-" | tr '\n' ' '); do \\
         wget --quiet $PYPI_MIRROR/\$FNAME -O /tmp/\$FNAME; \\
     done
 EOF
 read -r -d '' PYPKGS_INSTALL <<EOF
-    for PYPKG in $(cat ./resources/python_packages.txt | grep -v "setuptools" | tr '\n' ' '); do \\
+    for PYPKG in $(cat ./resources/python_packages.txt | grep -v "setuptools" | grep -v "scipy" | grep -v -i "cython" | tr '\n' ' '); do \\
         easy_install-2.7 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
         easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
     done && \\
-    for PYPKG in $(cat ./resources/python3_packages.txt | grep -v "setuptools" | tr '\n' ' '); do \\
+    for PYPKG in $(cat ./resources/python3_packages.txt | grep -v "setuptools" | grep -v "scipy" | grep -v -i "cython" | tr '\n' ' '); do \\
         easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
     done && \\
     easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
@@ -80,19 +77,17 @@ cat <<EOF >bjodahimg-dockerfile/environment/Dockerfile
 FROM bjodah/bjodahimgbase:v1.1
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
 RUN \\
-    apt-get update && apt-get --quiet --assume-yes install ${APT_PACKAGES} && \\
-    ${CLEAN}
-RUN \\
-    apt-get update && apt-get --quiet --assume-yes install freeglut3-dev && \\
+    apt-get update && apt-get --quiet --assume-yes --no-install-recommends install ${APT_PACKAGES} && \\
     ${CLEAN}
 RUN \\
     ${DPKG_DOWNLOAD_INSTALL} && \\
     ${PYPKGS_DOWNLOAD} && \\
     ${PYPKGS_INSTALL} && \\
-    ${CLEAN} && \\
-    ${MATPLOTLIB}
-RUN \\
-    ${BLOBS_DOWNLOAD_INSTALL}    
+    ${MATPLOTLIB} && \\
+    ${BLOBS_DOWNLOAD_INSTALL} && \\
+    ${CLEAN}
+# RUN \\
+#     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install MISSING_PACKAGE
 EOF
 
 # the last RUN statement contain various fixes...

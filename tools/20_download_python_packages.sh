@@ -1,11 +1,10 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 tmpdir=$(mktemp -d)
 trap "rm -r $tmpdir" SIGINT SIGTERM EXIT
 virtualenv $tmpdir
 source $tmpdir/bin/activate
-pip install --no-use-wheel --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
-pip3.4 install --no-use-wheel --download pypi_download $(cat resources/python3_packages.txt | tr '\n' ' ')
+pip2.7 install --no-use-wheel --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
 
 cat <<EOF>tests/test_python_packages.sh
 #!/bin/bash -e
@@ -17,3 +16,5 @@ for pypkg in $(cat resources/python_packages.txt); do
     fi
     echo "python -c \"import $pypkg\"">>tests/test_python_packages.sh
 done
+
+pip3.4 install --no-use-wheel --download pypi_download $(cat resources/python3_packages.txt | tr '\n' ' ')

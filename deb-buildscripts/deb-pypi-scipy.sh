@@ -29,23 +29,18 @@ fi
 mkdir -p deb-pypi-build
 cd deb-pypi-build
 
-PKG_FNAMES=$(cd ../pypi_download/; ls scipy*)
-for FNAME in $PKG_FNAMES; do
-    if [[ $FNAME =~ \.zip$ ]]; then
-        unzip ../pypi_download/${FNAME}
-    else
-        tar xf ../pypi_download/${FNAME}
-    fi
-    FNAMEBASE=$(python -c "print('-'.join(\"$FNAME\".split('-')[:-1]))")
-    echo $FNAMEBASE
-    cd ${FNAMEBASE}-*
-    set +x
-    python setup.py --command-packages=stdeb.command bdist_deb
-    python3 setup.py --command-packages=stdeb.command bdist_deb
-    #dpkg -i deb_dist/*.deb
-    cp deb_dist/*.deb ../../
-    cd -
-done
+FNAME=$(cd ../pypi_download/; ls scipy*)
+if [[ $FNAME =~ \.zip$ ]]; then
+    unzip ../pypi_download/${FNAME}
+else
+    tar xf ../pypi_download/${FNAME}
+fi
+FNAMEBASE=$(python -c "print('-'.join(\"$FNAME\".split('-')[:-1]))")
+echo $FNAMEBASE
+cd ${FNAMEBASE}-*
+set -x
+python setup.py --command-packages=stdeb.command bdist_deb
+python3 setup.py --command-packages=stdeb.command bdist_deb
+cp deb_dist/*.deb ../
 
-#py2dsc-deb ../pypi_download/numpy-1.10.4.tar.gz
 savehash

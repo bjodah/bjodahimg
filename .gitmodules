@@ -2,7 +2,7 @@
 	path = bjodahimg-dockerfile
 	url = git@github.com:bjodah/bjodahimg-dockerfile
 [submodule "bjodahimgbase"]
-	path = bjodahimgbase
+	path = bjodahimgbase-dockerfile
 	url = git@github.com:bjodah/bjodahimgbase.git
 [submodule "bjodahimgdev-dockerfile"]
 	path = bjodahimgdev-dockerfile

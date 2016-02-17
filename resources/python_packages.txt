@@ -1,5 +1,4 @@
 setuptools
-stdeb
 scipy
 future
 cython
@@ -29,3 +28,5 @@ toolz
 grip
 statsmodels
 mpld3
+pip
+stdeb

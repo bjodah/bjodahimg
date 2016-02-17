@@ -13,8 +13,13 @@ See also [bjodahimgbase](https://github.com/bjodah/bjodahimgbase)
 In principle the following steps are executed:
 
 ```
+$ ./tools/03_download_base_python_packages.sh
+$ ./tools/04_upload_base_to_repo.sh latest
+$ ./tools/05_generate_base_Dockerfile.sh latest
+$ ./tools/10_build_base_image.sh latest dummy_reg_user # push and tag and use below:
 $ ./tools/20_download_python_packages.sh
 $ ./tools/30_download_blobs.sh
+$ ./tools/35_render_build_scripts.sh
 $ ./tools/40_build_packages.sh
 $ ./tools/60_upload_to_repo.sh latest
 $ ./tools/70_generate_Dockerfile.sh latest
