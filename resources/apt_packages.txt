@@ -1,12 +1,11 @@
     texlive-generic-recommended texlive-latex-recommended texlive-science texlive-fonts-recommended \
     texlive-latex-extra  texlive-lang-swedish lmodern latex-xcolor texlive-bibtex-extra biber \
     graphviz dot2tex dvipng \
-    libfreetype6-dev libpng12-dev libjpeg-dev freeglut3-dev \
-    libgmp-dev libmpfr-dev \
-    libzmq3-dev libxslt1-dev libxml2-dev \
+    freeglut3-dev \
+    expect-dev xutils-dev \
     phantomjs imagemagick \
-    libopenmpi-dev \
-    libatlas-base-dev \
     python-matplotlib python3-matplotlib \
     python-mako python3-mako \
-    python-mpmath python3-mpmath
+    python-mpmath python3-mpmath \
+    octave \
+    libxrender1 fonts-dejavu pandoc

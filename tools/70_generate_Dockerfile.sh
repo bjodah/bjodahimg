@@ -74,7 +74,7 @@ EOF
 
 cat <<EOF >bjodahimg-dockerfile/environment/Dockerfile
 # DO NOT EDIT, This Dockerfile is generated from ./tools/10_generate_Dockerfile.sh
-FROM bjodah/bjodahimgbase:v1.1
+FROM bjodah/bjodahimgbase:v1.3
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
 RUN \\
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install ${APT_PACKAGES} && \\

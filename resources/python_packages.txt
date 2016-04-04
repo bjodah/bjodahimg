@@ -30,3 +30,6 @@ statsmodels
 mpld3
 pip
 stdeb
+param
+holoviews[recommended]
+ase
