@@ -4,7 +4,7 @@ tmpdir=$(mktemp -d)
 trap "rm -r $tmpdir" SIGINT SIGTERM EXIT
 virtualenv $tmpdir
 source $tmpdir/bin/activate
-pip2.7 install --no-use-wheel --download pypi_download_base $(cat resources_base/python_packages.txt | tr '\n' ' ')
+python2 -m pip install --no-use-wheel --download pypi_download_base $(cat resources_base/python_packages.txt | tr '\n' ' ')
 
 cat <<EOF>tests_base/test_python_packages.sh
 #!/bin/bash -e

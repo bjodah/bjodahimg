@@ -1,10 +1,10 @@
 #!/bin/bash -e
 # Modified version of:
 # https://github.com/ulikoehler/deb-buildscripts/blob/master/deb-boost.sh
-BOOST_FNAME=boost-all_1.60.0.orig.tar.bz2
-BOOST_URL=http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2
-BOOST_MD5=65a840e1a0b13a558ff19eeb2c4f0cbe
-export DEBVERSION=1.60.0-1
+BOOST_FNAME=boost-all_1.61.0.orig.tar.bz2
+BOOST_URL=http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2
+BOOST_MD5=6095876341956f65f9d35939ccea1a9f
+export DEBVERSION=1.61.0-1
 
 # We assume this script is idempotent and side effects are
 # left intact since last invocation:

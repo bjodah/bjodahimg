@@ -40,21 +40,33 @@ read -r -d '' PYPKGS_DOWNLOAD <<EOF
     cd setuptools-*  && \\
     python2 setup.py install && \\
     python3 setup.py install && \\
+    cd - && \\
+    wget --quiet $PYPI_MIRROR/$(cd pypi_download; ls pip-*.tar.gz) && \\
+    tar xvzf pip-*.tar.gz  && \\
+    cd pip-*  && \\
+    python2 setup.py install && \\
+    python3 setup.py install && \\
+    cd - && \\
     hash -r  && \\
-    for FNAME in $(cd pypi_download; ls * | grep -v "setuptools-" | grep -v "scipy-" | grep -v -i "cython-" | tr '\n' ' '); do \\
+    for FNAME in $(cd pypi_download; ls * | grep -v "setuptools-" | grep -v "pip-" | grep -v "scipy-" | grep -v -i "cython-" | tr '\n' ' '); do \\
         wget --quiet $PYPI_MIRROR/\$FNAME -O /tmp/\$FNAME; \\
     done
 EOF
+
+        # easy_install-2.7 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+        # easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+
+    # easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
+    # easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
+
 read -r -d '' PYPKGS_INSTALL <<EOF
     for PYPKG in $(cat ./resources/python_packages.txt | grep -v "setuptools" | grep -v "scipy" | grep -v -i "cython" | tr '\n' ' '); do \\
-        easy_install-2.7 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
-        easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+        python2 -m pip install --no-index --find-links file:///tmp/ \$PYPKG; \\
+        python3 -m pip install --no-index --find-links file:///tmp/ \$PYPKG; \\
     done && \\
     for PYPKG in $(cat ./resources/python3_packages.txt | grep -v "setuptools" | grep -v "scipy" | grep -v -i "cython" | tr '\n' ' '); do \\
-        easy_install-3.4 --always-unzip --allow-hosts=None --find-links file:///tmp/ \$PYPKG; \\
+        python3 -m pip install --no-index --find-links file:///tmp/ \$PYPKG; \\
     done && \\
-    easy_install-2.7 /usr/local/lib/python2.7/dist-packages/*-py2.7.egg && \\
-    easy_install-3.4 /usr/local/lib/python3.4/dist-packages/*-py3.4.egg && \\
     ln -s /usr/local/share/pyphen /usr/share/pyphen && \\
     ipython2 kernel install && \\
     ipython3 kernel install

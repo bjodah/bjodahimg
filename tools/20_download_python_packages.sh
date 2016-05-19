@@ -1,10 +1,14 @@
 #!/bin/bash -ex
 
+python3.4 -m pip install --download pypi_download $(cat resources/python3_packages.txt | tr '\n' ' ')
+
 tmpdir=$(mktemp -d)
 trap "rm -r $tmpdir" SIGINT SIGTERM EXIT
 virtualenv $tmpdir
 source $tmpdir/bin/activate
-pip2.7 install --no-use-wheel --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
+python -m pip install --upgrade setuptools
+python -m pip install --download pypi_download $(cat resources/python_packages.txt | tr '\n' ' ')
+
 
 cat <<EOF>tests/test_python_packages.sh
 #!/bin/bash -e
@@ -14,7 +18,8 @@ for pypkg in $(cat resources/python_packages.txt); do
     if [[ $pypkg == *-* ]]; then
         continue
     fi
+    if [[ $pypkg == *[* ]]; then
+        continue
+    fi
     echo "python -c \"import $pypkg\"">>tests/test_python_packages.sh
 done
-
-pip3.4 install --no-use-wheel --download pypi_download $(cat resources/python3_packages.txt | tr '\n' ' ')

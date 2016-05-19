@@ -24,6 +24,9 @@ $ ./tools/40_build_packages.sh
 $ ./tools/60_upload_to_repo.sh latest
 $ ./tools/70_generate_Dockerfile.sh latest
 $ ./tools/80_build_image.sh latest dummy_reg_user
+$ ./tools/85_test_image.sh latest dummy_reg_user
+$ ./tools/90_build_dev_image.sh latest dummy_reg_user
+$ ./tools/95_test_dev_image.sh latest dummy_reg_user
 ```
 
 See [deb-buildscripts/](deb-buildscripts/) for packages built by

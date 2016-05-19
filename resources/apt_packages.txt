@@ -8,4 +8,5 @@
     python-mako python3-mako \
     python-mpmath python3-mpmath \
     octave \
-    libxrender1 fonts-dejavu pandoc
+    libxrender1 fonts-dejavu pandoc \
+    python-rdkit librdkit1 rdkit-data
